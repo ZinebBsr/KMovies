@@ -1,0 +1,701 @@
+@import url('https://fonts.googleapis.com/css2?family=Miniver&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Miniver&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
+
+* {
+  font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root{
+  --white-color:#fff ;
+  --dark-color: #0c4a5b;
+  --primary-color: #141519;
+  --secondary-color: #27dddf;
+  --light-pink-color:#faf4f5;
+  --medium-gray-color: #ccc;
+
+  --font-size-s: 0.9rem;
+  --font-size-n: 1rem;
+  --font-size-m: 1.12rem;
+  --font-size-l: 1.5rem;
+  --font-size-xl: 2rem;
+  --font-size-xxl: 4rem;
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --border-radius-s: 8px;
+  --border-radius-m: 30px;
+  --border-radius-circle: 50%;
+
+  --site-max-width: 1300px;
+}
+
+/*Stylings for whole site */
+ul{
+  list-style: none;
+}
+
+a{
+  text-decoration: none;
+}
+
+
+button{
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+img{
+  width: 100%;
+}
+
+.section-content{
+  margin: 0 auto;
+  padding: 0 20px;  
+  max-width: var(--site-max-width);
+}
+/*Navbar styling*/
+header {
+  position: fixed;
+  width: 100%;
+  z-index: 5;
+  background: var(--primary-color);
+}
+
+
+header .navbar {
+  display: flex;
+  padding: 20px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar .nav-menu{
+  display: flex;
+  gap: 10px;
+}
+
+.navbar .nav-menu .nav-link{
+  padding: 10px 18px;
+  font-size: var(--font-size-m);
+  color: var(--white-color);
+  border-radius: var(--border-radius-m);
+  transition: 0.3s ease;
+}
+.navbar .nav-menu .nav-link:hover{
+  background: linear-gradient(to top, var(--dark-color), var(--secondary-color));
+  color: var(--primary-color);
+}
+.logo-image {
+  height: 30px; /* Adjust as needed */
+  width: auto;
+}
+
+/*.background-blur {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('image/Background1.png');
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+}*/
+
+
+.home-page {
+  background-image: url('/static/image/Background1.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 100vh;
+  background-attachment: fixed; /* Pour que ça prenne tout l'écran */
+}
+
+
+
+/*code pour les images de films*/
+
+
+
+/* Effet de survol pour les cartes de films */
+.film-card:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+}
+
+
+/* Styles pour la grille de films */
+
+
+.hero-section{
+  min-height: 100 vh;
+}
+
+
+
+
+/* Ajustement des cartes pour la grille */
+
+.carousel-container {
+  position: relative;
+  width: 100%;
+  padding: 0 40px; /* Ajoute un espace de 40px de chaque côté pour les boutons */
+}
+
+.home-page .movie-grid {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  gap: 1.5rem;
+  padding: 1.5rem 0; /* Padding vertical uniquement, horizontal géré par .carousel-container */
+  width: 100%;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.home-page .movie-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.film-card {
+  flex: 0 0 auto;
+  width: 150px; /* Réduit la largeur de la carte (au lieu de 200px) */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(to top, var(--dark-color), var(--secondary-color));
+  border-radius: 0.75rem;
+  padding: 0.75rem; /* Réduit le padding */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  scroll-snap-align: start;
+}
+
+.film-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+}
+
+.film-card img {
+  width: 100%;
+  height: 200px; /* Réduit la hauteur de l'image (au lieu de 280px) */
+  object-fit: cover;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.film-card h3 {
+  margin-top: 0.5rem;
+  text-align: center;
+  font-size: 1rem; /* Réduit la taille du titre */
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.film-card p {
+  font-size: 0.75rem; /* Réduit la taille du texte */
+  color: var(--white-color);
+  margin-top: 0.25rem;
+}
+
+.carousel-prev,
+.carousel-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  background-color: transparent; /* Fond transparent */
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* Chevron gauche */
+.carousel-prev {
+  left: 0;
+}
+
+/* Chevron droit */
+.carousel-next {
+  right: 0;
+}
+
+/* Dessiner les chevrons avec des bordures */
+.carousel-prev::before,
+.carousel-next::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg); /* Rotation pour former un chevron */
+  width: 20px; /* Taille du chevron */
+  height: 20px;
+  border: 3px solid white; /* Couleur blanche */
+  border-top: none;
+  border-right: none;
+}
+
+/* Ajuster la direction du chevron pour le bouton "suivant" */
+.carousel-next::before {
+  transform: translate(-50%, -50%) rotate(-135deg); /* Rotation pour le chevron droit */
+}
+
+/* Effet au survol */
+.carousel-prev:hover::before,
+.carousel-next:hover::before {
+  border-color: #60a5fa; /* Change la couleur au survol (bleu assorti à ton thème) */
+}
+/* Page initial*/
+.hero-section .section-content{
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  color: var(--white-color);
+  justify-content: space-between;
+}
+
+.hero-section .section-content .hero-details .title{
+  font-size: 4.8rem;
+  color: var(--secondary-color);
+  font-family: 'Bebas Neue', cursive;
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+}
+
+.hero-section .hero-details .k-movies {
+  color: var(--secondary-color);
+  font-size: 7rem;
+  font-family: 'Bebas Neue', cursive;
+  letter-spacing: 4px;
+  display: inline-block;
+}
+
+
+.hero-section .section-content .hero-details .description {
+  font-size: var(--font-size-m);
+  font-family: "Poppins", sans-serif;
+  color: var(--white-color);
+  max-width: 55%;
+  margin: 24px 0 40px;
+  line-height: 1.5;
+}
+
+
+
+.section-title {
+  font-family: "Poppins", sans-serif;  /* Utilise une police élégante (déjà incluse dans ton HTML) */
+  font-size: 2rem; /* Taille plus grande pour plus d'impact */
+  font-weight: 700; /* Texte en gras */
+  color: #ffffff; /* Couleur blanche de base */
+  text-transform: uppercase; /* Met le texte en majuscules */
+  letter-spacing: 2px; /* Espacement entre les lettres pour un look raffiné */
+  text-align: center; /* Centre le texte */
+  margin-bottom: 2rem; /* Plus d'espace en bas */
+  position: relative; /* Pour les effets décoratifs */
+  background: linear-gradient(to right, var(--dark-color), var(--secondary-color)); /* Dégradé de bleu à blanc */
+  -webkit-background-clip: text; /* Applique le dégradé au texte */
+  -webkit-text-fill-color: transparent; /* Rend le texte transparent pour voir le dégradé */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Ombre subtile pour de la profondeur */
+}
+
+/* Ajoute un soulignement stylisé */
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px; /* Positionne le soulignement sous le texte */
+  left: 50%;
+  transform: translateX(-50%); /* Centre l'élément */
+  width: 60px; /* Largeur du soulignement */
+  height: 4px; /* Épaisseur */
+  
+  background: linear-gradient(to right, var(--dark-color), var(--secondary-color)); /* Même dégradé que le texte */
+  border-radius: 2px; /* Bords arrondis */
+}
+
+
+
+
+
+/*code de recommendations*/
+
+
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Ajuste automatiquement le nombre de cartes selon l'écran */
+  gap: 2.5rem 1.5rem; /* 2.5rem vertical (row-gap), 0.75rem horizontal (column-gap) */
+  padding: 1.5rem;
+  width: 100%;
+}
+
+
+
+/* code de la page recomendation*/
+/* Ajouter une marge supérieure au conteneur pour décaler le contenu */
+.fullness {
+  padding-top: 80px; /* Ajuste cette valeur en fonction de la hauteur réelle de ton header */
+}
+
+
+
+h2 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+/* Style pour le formulaire */
+
+
+.container {
+  margin-top: 80px;
+}
+
+/* Style pour le formulaire */
+.form {
+  width: 100%;
+  max-width: 500px;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  border-radius: 60px;
+  padding: 2px;
+  margin: 0 auto;
+  margin-bottom: 2rem;
+}
+
+/* Style pour le label */
+
+
+/* Conteneur pour l'input et le bouton */
+.search-container {
+  position: relative; /* Pour positionner la liste de suggestions */
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
+  padding: 5px;
+}
+
+/* Style pour la barre de saisie */
+.select-movie {
+  flex-grow: 1;
+  padding: 12px;
+  background: transparent;
+  border-radius: 12px;
+  color: white;
+  font-size: 1.1rem;
+  outline: none;
+}
+
+/* Style pour la liste de suggestions */
+.suggestions-list {
+  position: absolute;
+  top: 100%; /* Juste en dessous de l'input */
+  left: 5px;
+  right: 5px;
+  max-height: 200px;
+  overflow-y: auto;
+  background: #333;
+  border-radius: 8px;
+  z-index: 10;
+  display: none; /* Caché par défaut */
+}
+
+.suggestions-list div {
+  padding: 10px;
+  color: white;
+  cursor: pointer;
+}
+
+.suggestions-list div:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Style pour le bouton */
+.submit-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  background: var(--dark-color);
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.submit-button img {
+  width: 25px;
+}
+
+.submit-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+
+
+
+.search-intro {
+  font-family: "Poppins", sans-serif;  /* Utilise une police élégante (déjà incluse dans ton HTML) */
+  font-size: 0.9rem; /* Taille plus grande pour plus d'impact */
+  font-weight: 700; /* Texte en gras */
+  color: #ffffff; /* Couleur blanche de base */
+  text-transform: uppercase; /* Met le texte en majuscules */
+  letter-spacing: 2px; /* Espacement entre les lettres pour un look raffiné */
+  text-align: center; /* Centre le texte */
+  margin-bottom: 3rem; /* Plus d'espace en bas */
+  position: relative; /* Pour les effets décoratifs */
+  background: linear-gradient(to right, var(--dark-color), var(--secondary-color)); /* Dégradé de bleu à blanc */
+  -webkit-background-clip: text; /* Applique le dégradé au texte */
+  -webkit-text-fill-color: transparent; /* Rend le texte transparent pour voir le dégradé */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Ombre subtile pour de la profondeur */
+}
+
+/* Ajoute un soulignement stylisé */
+.search-intro::after {
+  content: '';
+  position: absolute;
+  bottom: -10px; /* Positionne le soulignement sous le texte */
+  left: 50%;
+  transform: translateX(-50%); /* Centre l'élément */
+  width: 60px; /* Largeur du soulignement */
+  height: 4px; /* Épaisseur */
+  background: linear-gradient(to top, var(--dark-color), var(--secondary-color)); /* Même dégradé que le texte */
+  border-radius: 2px; /* Bords arrondis */
+}
+
+.votrefilm {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: white;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 2rem auto;
+  max-width: 900px;
+  
+
+}
+
+.votrefilm .movie-title {
+  color: #FFD700; /* Jaune pâle pour le titre du film */
+  font-weight: 700;
+}
+
+.votrefilm .cluster-name {
+  color: #FFD700; /* Cyan clair pour le nom du cluster */
+  font-weight: 700;
+}
+.pour_vous {
+  font-family: "Poppins", sans-serif;  /* Utilise une police élégante (déjà incluse dans ton HTML) */
+  font-size: 0.9rem; /* Taille plus grande pour plus d'impact */
+  font-weight: 700; /* Texte en gras */
+  color: #ffffff; /* Couleur blanche de base */
+  text-transform: uppercase; /* Met le texte en majuscules */
+  letter-spacing: 2px; /* Espacement entre les lettres pour un look raffiné */
+  text-align: center; /* Centre le texte */
+  margin-top: 3rem;
+  margin-bottom: 2rem; /* Plus d'espace en bas */
+  position: relative; /* Pour les effets décoratifs */
+  background: linear-gradient(to right, var(--dark-color), var(--secondary-color)); /* Dégradé de bleu à blanc */
+  -webkit-background-clip: text; /* Applique le dégradé au texte */
+  -webkit-text-fill-color: transparent; /* Rend le texte transparent pour voir le dégradé */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Ombre subtile pour de la profondeur */
+}
+
+/* Ajoute un soulignement stylisé */
+.pour_vous::after {
+  content: '';
+  position: absolute;
+  bottom: -10px; /* Positionne le soulignement sous le texte */
+  left: 50%;
+  transform: translateX(-50%); /* Centre l'élément */
+  width: 60px; /* Largeur du soulignement */
+  height: 4px; /* Épaisseur */
+  
+  background: linear-gradient(to top, var(--dark-color), var(--secondary-color)); /* Même dégradé que le texte */
+  border-radius: 2px; /* Bords arrondis */
+}
+
+
+
+
+.recommendations-page {
+  background-image: url('/static/image/Background2.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 100vh;
+  background-attachment: fixed; /* Pour que ça prenne tout l'écran */
+}
+
+
+/*code pour les details d'un film*/
+
+.movie-details {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--border-radius-s);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.movie-poster {
+  width: 200px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: var(--border-radius-s);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.movie-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-size: var(--font-size-m);
+  color: var(--white-color);
+}
+
+.movie-info p {
+  margin: 0;
+}
+
+.movie-info strong {
+  color: var(--secondary-color);
+}
+
+@media (max-width: 768px) {
+  .movie-details {
+      flex-direction: column;
+      align-items: center;
+  }
+
+  .movie-poster {
+      width: 150px;
+      height: 225px;
+  }
+}
+
+/*  design de la pages qui affiche les clusters*/
+/* Nombre de clusters */
+.cluster-count {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: var(--font-size-m);
+  color: var(--white-color);
+  margin: 1rem 0;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--border-radius-s);
+  display: inline-block;
+}
+
+/* Grille des clusters */
+.cluster-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2.5rem 1.5rem;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: var(--site-max-width);
+    margin: 0 auto;
+}
+
+/* Carte de cluster */
+.cluster-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to top, var(--dark-color), var(--secondary-color));
+    border-radius: var(--border-radius-s);
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    color: var(--white-color);
+    font-size: var(--font-size-l);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+}
+
+.cluster-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+}
+
+.cluster-card h3 {
+    margin: 0;
+    font-size: var(--font-size-m);
+}
+
+/* Message pour aucun film */
+.no-movies {
+    font-size: var(--font-size-m);
+    color: var(--white-color);
+    text-align: center;
+    margin: 2rem auto;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius-s);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+
+/* Code pour About*/
+
+
+/* Page About */
+.about-page {
+  background-image: url('/static/image/Background1.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* Section About */
+.about-section {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--border-radius-s);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Sous-titre de section */
+.section-subtitle {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: var(--font-size-l);
+  color: var(--secondary-color);
+  margin-bottom: 1rem;
+}
+
+/* Paragraphes dans les sections About */
+.about-section p {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: var(--font-size-m);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  color: #faf4f5;
+}

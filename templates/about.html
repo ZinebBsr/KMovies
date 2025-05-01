@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse de Films - À Propos</title>
+    <link rel="icon" href="/static/favicon.png">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="about-page">
+    <header>
+        <nav class="navbar section-content">
+            <a href="#" class="nav-logo">
+                <img src="/static/image/K-Movies.png" alt="K-Movies Logo" class="logo-image">
+            </a>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('recommendations') }}" class="nav-link">Recommendations</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('clusters') }}" class="nav-link">Clusters</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('about') }}" class="nav-link">About</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="fullness">
+        <div class="section-content">
+            <h1 class="section-title">À Propos</h1>
+            
+            <section class="about-section">
+                <h2 class="section-subtitle">À Propos du Projet</h2>
+                <p>
+                    K-Movies est une application web développée dans le cadre du projet ADD. 
+                    L'objectif principal est de fournir des recommandations de films personnalisées en utilisant des techniques de clustering 
+                    pour regrouper les films par similitudes (genres, thèmes, etc.). 
+                    L'application permet aux utilisateurs de découvrir des films récents et populaires, d'explorer des clusters de films similaires, 
+                    et d'obtenir des recommandations basées sur leurs préférences. 
+                    Elle s'appuie sur une base de données SQLite contenant des informations détaillées sur les films, 
+                    combinée à un algorithme de clustering implémenté en Python.
+                </p>
+                <p>
+                    Ce projet vise à combiner la passion pour le cinéma avec les technologies modernes de science des données, 
+                    offrant une expérience utilisateur intuitive et visuellement attrayante.
+                </p>
+            </section>
+
+            <section class="about-section">
+                <h2 class="section-subtitle">À Propos de Moi</h2>
+                <p>
+                    Développé par Zineb Bousraf, étudiante en ingénierie financière, 
+                    passionnée par la science des données et le cinéma. Ce projet allie mes compétences 
+                    techniques à ma créativité pour proposer une expérience innovante autour des films.
+                </p>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

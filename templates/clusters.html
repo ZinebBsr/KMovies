@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse de Films - Clusters</title>
+    <link rel="icon" href="/static/favicon.png">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="recommendations-page">
+    <header>
+        <nav class="navbar section-content">
+            <a href="#" class="nav-logo">
+                <img src="/static/image/K-Movies.png" alt="K-Movies Logo" class="logo-image">
+            </a>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('recommendations') }}" class="nav-link">Recommendations</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('clusters') }}" class="nav-link">Clusters</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('about') }}" class="nav-link">About</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="fullness">
+        <div class="section-content">
+            <h1 class="section-title">Nos Clusters de Films</h1>
+            <p class="cluster-count">Nombre total de clusters : {{ total_clusters }}</p>
+            <div class="cluster-grid">
+                {% for cluster in clusters %}
+                    <a href="{{ url_for('cluster_detail', cluster_id=cluster.id) }}" class="cluster-card">
+                        <h3>{{ cluster.name }}</h3>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse de Films - Recommandations</title>
+    <link rel="icon" href="/static/favicon.png">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="recommendations-page">
+    <header>
+        <nav class="navbar section-content">
+            <a href="#" class="nav-logo">
+                <img src="/static/image/K-Movies.png" alt="K-Movies Logo" class="logo-image">
+            </a>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('recommendations') }}" class="nav-link">recommendations</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('clusters') }}" class="nav-link">clusters</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">About</a>
+                </li>
+                
+            </ul>
+        </nav>
+    </header>
+
+    <div class="fullness">
+        <h2 class="search-intro">Recherchez un film</h2>
+        <form method="POST" class="form">
+            <div class="search-container">
+                <input type="text" id="movie-input" class="select-movie" placeholder="Tapez un nom de film ici..." autocomplete="off">
+                <input type="hidden" name="movie" id="movie-value"> <!-- Champ caché pour stocker le tconst -->
+                <div id="suggestions" class="suggestions-list"></div> <!-- Liste des suggestions -->
+                <button type="submit" class="submit-button">
+                    <img src="/static/image/search.png" alt="Rechercher">
+                </button>
+            </div>
+        </form>
+
+        {% if recommended_movies %}
+        <h3 class="votrefilm">
+            {% if cluster_name %}
+                Votre film <span class="movie-title">{{ selected_movie_title }}</span> est classé dans : <span class="cluster-name">{{ cluster_name }}</span>
+            {% endif %}
+        </h3>
+            <h2 class="pour_vous">Films recommandés pour vous</h2>
+            <div class="movie-grid">
+                {% for movie in recommended_movies %}
+                    <a href="{{ url_for('film_detail', tconst=movie['tconst']) }}" class="film-card">
+                        <img src="{{ movie['poster'] }}" alt="{{ movie['primaryTitle'] }}">
+                        <h3>{{ movie['primaryTitle'] }}</h3>
+                        <p>{{ movie['averageRating'] }} ⭐</p>
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <script>
+        // Liste des films passée depuis Flask
+        const movies = [
+            {% for movie in all_movies %}
+                { tconst: "{{ movie['tconst'] }}", primaryTitle: "{{ movie['primaryTitle'] | escape }}" },
+            {% endfor %}
+        ];
+    
+        // Sélection des éléments
+        const movieInput = document.getElementById('movie-input');
+        const movieValue = document.getElementById('movie-value');
+        const suggestionsList = document.getElementById('suggestions');
+    
+        // Écouter les saisies dans l'input
+        movieInput.addEventListener('input', () => {
+            const query = movieInput.value.toLowerCase();
+            suggestionsList.innerHTML = ''; // Vider les suggestions
+    
+            if (query.length === 0) {
+                suggestionsList.style.display = 'none';
+                return;
+            }
+    
+            // Filtrer les films
+            const filteredMovies = movies.filter(movie =>
+                movie.primaryTitle.toLowerCase().includes(query)
+            );
+    
+            // Afficher les suggestions
+            if (filteredMovies.length > 0) {
+                suggestionsList.style.display = 'block';
+                filteredMovies.forEach(movie => {
+                    const suggestion = document.createElement('div');
+                    suggestion.textContent = movie.primaryTitle;
+                    suggestion.addEventListener('click', () => {
+                        movieInput.value = movie.primaryTitle;
+                        movieValue.value = movie.tconst; // Mettre à jour la valeur cachée
+                        suggestionsList.innerHTML = ''; // Vider les suggestions
+                        suggestionsList.style.display = 'none';
+                    });
+                    suggestionsList.appendChild(suggestion);
+                });
+            } else {
+                suggestionsList.style.display = 'none';
+            }
+        });
+    
+        // Cacher les suggestions si on clique ailleurs
+        document.addEventListener('click', (e) => {
+            if (!movieInput.contains(e.target) && !suggestionsList.contains(e.target)) {
+                suggestionsList.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

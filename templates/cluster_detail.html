@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse de Films - Détails du Cluster</title>
+    <link rel="icon" href="/static/favicon.png">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="recommendations-page">
+    <header>
+        <nav class="navbar section-content">
+            <a href="#" class="nav-logo">
+                <img src="/static/image/K-Movies.png" alt="K-Movies Logo" class="logo-image">
+            </a>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('recommendations') }}" class="nav-link">Recommendations</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('clusters') }}" class="nav-link">Clusters</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">About</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="fullness">
+        <h1 class="section-title">{{ cluster_name }}</h1>
+        {% if movies %}
+            <div class="movie-grid">
+                {% for movie in movies %}
+                    <a href="{{ url_for('film_detail', tconst=movie['tconst']) }}" class="film-card">
+                        <img src="{{ movie['poster'] }}" alt="{{ movie['primaryTitle'] }}">
+                        <h3>{{ movie['primaryTitle'] }}</h3>
+                        <p>{{ movie['averageRating'] | default('Non disponible') }} ⭐</p>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="no-movies">Aucun film trouvé dans ce cluster.</p>
+        {% endif %}
+    </main>
+</body>
+</html>

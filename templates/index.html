@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>K-Movies</title>
+    <link rel="icon" href="/static/favicon.png">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body class="home-page">
+    <header>
+        <nav class="navbar section-content">
+            <a href="#" class="nav-logo">
+                <img src="/static/image/K-Movies.png" alt="K-Movies Logo" class="logo-image">
+            </a>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('recommendations') }}" class="nav-link">Recommendations</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('clusters') }}" class="nav-link">Clusters</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('about') }}" class="nav-link">About</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <!-- Hero section -->
+        <section class="hero-section">
+            <div class="section-content">
+                <div class="hero-details">
+                    <h2 class="title">
+                        Bienvenue sur<br><span class="k-movies">K-MOVIES</span>
+                    </h2>
+                    <p class="description">Plongez dans l’univers du cinéma à travers
+                        une classification intelligente des films.</p>
+                </div>
+            </section>
+            <!-- Films récents -->
+<section class="section-content movie-section">
+    <h2 class="section-title">Films récents</h2>
+    <div class="carousel-container">
+        <button class="carousel-prev"></button>
+        <div class="movie-grid" id="recent-carousel">
+            {% if recent_movies %}
+                {% for movie in recent_movies %}
+                    <a href="{{ url_for('film_detail', tconst=movie['tconst']) }}" class="film-card">
+                        <img src="{{ movie['poster'] }}" alt="{{ movie['primaryTitle'] }}">
+                        <h3>{{ movie['primaryTitle'] }}</h3>
+                        <p>{{ movie['averageRating'] }} ⭐ </p>
+                    </a>
+                {% endfor %}
+            {% else %}
+                <p>Aucun film récent trouvé.</p>
+            {% endif %}
+        </div>
+        <button class="carousel-next"></button>
+    </div>
+</section>
+
+<!-- Films populaires -->
+<section class="section-content movie-section">
+    <h2 class="section-title">Films populaires</h2>
+    <div class="carousel-container">
+        <button class="carousel-prev"></button>
+        <div class="movie-grid" id="popular-carousel">
+            {% if popular_movies %}
+                {% for movie in popular_movies %}
+                    <a href="{{ url_for('film_detail', tconst=movie['tconst']) }}" class="film-card">
+                        <img src="{{ movie['poster'] }}" alt="{{ movie['primaryTitle'] }}">
+                        <h3>{{ movie['primaryTitle'] }}</h3>
+                        <p>{{ movie['averageRating'] }} ⭐</p>
+                    </a>
+                {% endfor %}
+            {% else %}
+                <p>Aucun film populaire trouvé.</p>
+            {% endif %}
+        </div>
+        <button class="carousel-next"></button>
+    </div>
+</section>
+    
+            
+        </main>
+        <script>
+            function setupCarousel(carouselId) {
+                const carousel = document.getElementById(carouselId);
+                const prevBtn = carousel.parentElement.querySelector('.carousel-prev');
+                const nextBtn = carousel.parentElement.querySelector('.carousel-next');
+    
+                prevBtn.addEventListener('click', () => {
+                    carousel.scrollBy({ left: -150, behavior: 'smooth' }); // Ajusté pour la nouvelle largeur des cartes
+                });
+    
+                nextBtn.addEventListener('click', () => {
+                    carousel.scrollBy({ left: 150, behavior: 'smooth' }); // Ajusté pour la nouvelle largeur des cartes
+                });
+            }
+    
+            setupCarousel('recent-carousel');
+            setupCarousel('popular-carousel');
+        </script>
+    </body>
+</html>

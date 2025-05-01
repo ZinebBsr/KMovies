@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse de Films - Détails</title>
+    <link rel="icon" href="/static/favicon.png">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="recommendations-page">
+    <header>
+        <nav class="navbar section-content">
+            <a href="#" class="nav-logo">
+                <img src="/static/image/K-Movies.png" alt="K-Movies Logo" class="logo-image">
+            </a>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('recommendations') }}" class="nav-link">Recommendations</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('clusters') }}" class="nav-link">Clusters</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">About</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="fullness">
+        <div class="section-content">
+            <h1 class="section-title">{{ movie['primaryTitle'] }}</h1>
+            <div class="movie-details">
+                <img src="{{ movie['poster'] }}" alt="{{ movie['primaryTitle'] }}" class="movie-poster">
+                <div class="movie-info">
+                    <p><strong>Réalisateur :</strong> {{ movie['directorName'] | default('Non spécifié') }}</p>
+                    <p><strong>Note :</strong> {{ movie['averageRating'] | default('Non disponible') }} ⭐</p>
+                    <p><strong>Genres :</strong> {{ movie['genres'] | default('Non spécifié') }}</p>
+                    <p><strong>Synopsis :</strong> {{ movie['plot'] | default('Non disponible') }}</p>
+                    <p><strong>Pays :</strong> {{ movie['country'] | default('Non spécifié') }}</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
