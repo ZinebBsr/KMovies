@@ -4,8 +4,6 @@ import pickle
 import os
 
 app = Flask(__name__)
-app.config['TEMPLATES_AUTO_RELOAD'] = True
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PICKLE_PATH = os.path.join(BASE_DIR, "clusters.pkl")
@@ -18,11 +16,11 @@ try:
         cluster_data = donnees["clusters"]  # Liste de listes de tconst
         noms_clusters = donnees["noms"]  # Liste de noms, même ordre
 except FileNotFoundError:
-    print("Erreur : Le fichier clusters.pkl n'a pas été trouvé. Vérifiez le chemin.")
+    app.logger.error("Erreur : Le fichier clusters.pkl n'a pas été trouvé. Vérifiez le chemin.")
     cluster_data = []
     noms_clusters = []
 except Exception as e:
-    print(f"Erreur lors du chargement de clusters.pkl : {e}")
+    app.logger.error(f"Erreur lors du chargement de clusters.pkl : {e}")
     cluster_data = []
     noms_clusters = []
 
@@ -36,7 +34,7 @@ def get_db_connection():
         conn.row_factory = sqlite3.Row
         return conn
     except sqlite3.Error as e:
-        print(f"Erreur lors de la connexion à la base de données : {e}")
+        app.logger.error(f"Erreur lors de la connexion à la base de données : {e}")
         return None
 
 # Route pour la page d'accueil
@@ -44,10 +42,8 @@ def get_db_connection():
 def index():
     conn = get_db_connection()
     if conn is None:
-        print("Échec de la connexion à la base de données")
         return "Erreur de connexion à la base de données", 500
 
-    # Films récents (10 films les plus récents, triés par note)
     query_recent = """
     SELECT tconst, primaryTitle, averageRating, poster, startYear
     FROM movies_with_directors 
@@ -56,7 +52,6 @@ def index():
     LIMIT 20
     """
 
-    # Films populaires (basés sur numVotes)
     query_popular = """
     SELECT tconst, primaryTitle, averageRating, poster
     FROM movies_with_directors 
@@ -69,7 +64,7 @@ def index():
         recent_movies = conn.execute(query_recent).fetchall()
         popular_movies = conn.execute(query_popular).fetchall()
     except sqlite3.Error as e:
-        print(f"Erreur lors de l'exécution des requêtes : {e}")
+        app.logger.error(f"Erreur lors de l'exécution des requêtes : {e}")
         recent_movies = []
         popular_movies = []
     finally:
@@ -92,7 +87,7 @@ def film_detail(tconst):
     try:
         movie = conn.execute(query, (tconst,)).fetchone()
     except sqlite3.Error as e:
-        print(f"Erreur lors de l'exécution de la requête : {e}")
+        app.logger.error(f"Erreur lors de l'exécution de la requête : {e}")
         movie = None
     finally:
         conn.close()
@@ -105,10 +100,9 @@ def film_detail(tconst):
 @app.route("/clusters")
 def clusters():
     clusters = [{"id": cluster_id, "name": cluster_name} for cluster_id, cluster_name in cluster_names.items()]
-    total_clusters = len(clusters)  # Nombre total de clusters
+    total_clusters = len(clusters)
     return render_template("clusters.html", clusters=clusters, total_clusters=total_clusters)
 
-# Route pour un cluster spécifique
 @app.route("/cluster/<int:cluster_id>")
 def cluster_detail(cluster_id):
     if cluster_id not in cluster_names:
@@ -118,13 +112,11 @@ def cluster_detail(cluster_id):
     if conn is None:
         return "Erreur de connexion à la base de données", 500
 
-    # Récupérer les films du cluster
     tconsts = cluster_data[cluster_id]
     if not tconsts:
         conn.close()
         return render_template("cluster_detail.html", cluster_name=cluster_names[cluster_id], movies=[])
 
-    # Créer une chaîne pour la requête SQL avec des placeholders
     placeholders = ",".join("?" for _ in tconsts)
     query = f"""
     SELECT tconst, primaryTitle, averageRating, poster
@@ -135,21 +127,19 @@ def cluster_detail(cluster_id):
     try:
         movies = conn.execute(query, tconsts).fetchall()
     except sqlite3.Error as e:
-        print(f"Erreur lors de l'exécution de la requête : {e}")
+        app.logger.error(f"Erreur lors de l'exécution de la requête : {e}")
         movies = []
     finally:
         conn.close()
 
     return render_template("cluster_detail.html", cluster_name=cluster_names[cluster_id], movies=movies)
 
-# Route pour la page de recommandations
 @app.route("/recommendations", methods=["GET", "POST"])
 def recommendations():
     conn = get_db_connection()
     if conn is None:
         return "Erreur de connexion à la base de données", 500
 
-    # Récupérer tous les films pour la liste déroulante
     query_all_movies = """
     SELECT tconst, primaryTitle
     FROM movies_with_directors 
@@ -159,9 +149,9 @@ def recommendations():
     try:
         all_movies = conn.execute(query_all_movies).fetchall()
     except sqlite3.Error as e:
-        print(f"Erreur lors de l'exécution de la requête : {e}")
+        app.logger.error(f"Erreur lors de l'exécution de la requête : {e}")
         all_movies = []
-    
+
     recommended_movies = []
     cluster_name = None
     selected_movie_title = None
@@ -169,7 +159,6 @@ def recommendations():
     if request.method == "POST":
         selected_tconst = request.form.get("movie")
         if selected_tconst:
-            # Récupérer le titre du film sélectionné
             query_selected_movie = """
             SELECT primaryTitle
             FROM movies_with_directors 
@@ -179,10 +168,9 @@ def recommendations():
                 selected_movie = conn.execute(query_selected_movie, (selected_tconst,)).fetchone()
                 selected_movie_title = selected_movie["primaryTitle"] if selected_movie else None
             except sqlite3.Error as e:
-                print(f"Erreur lors de l'exécution de la requête : {e}")
+                app.logger.error(f"Erreur lors de l'exécution de la requête : {e}")
                 selected_movie_title = None
 
-            # Trouver le cluster auquel appartient le film sélectionné
             cluster_id = None
             for idx, cluster in enumerate(cluster_data):
                 if selected_tconst in cluster:
@@ -191,7 +179,6 @@ def recommendations():
                     break
             
             if cluster_id is not None:
-                # Récupérer les films du cluster (exclure le film sélectionné)
                 tconsts = [tconst for tconst in cluster_data[cluster_id] if tconst != selected_tconst]
                 if tconsts:
                     placeholders = ",".join("?" for _ in tconsts)
@@ -205,17 +192,16 @@ def recommendations():
                     try:
                         recommended_movies = conn.execute(query_recommendations, tconsts).fetchall()
                     except sqlite3.Error as e:
-                        print(f"Erreur lors de l'exécution de la requête : {e}")
+                        app.logger.error(f"Erreur lors de l'exécution de la requête : {e}")
                         recommended_movies = []
 
     conn.close()
     return render_template("recommendations.html", all_movies=all_movies, recommended_movies=recommended_movies, cluster_name=cluster_name, selected_movie_title=selected_movie_title)
 
-# Route pour la page About
 @app.route("/about")
 def about():
     return render_template("about.html")
 
-# Lancer le serveur Flask (pour tests locaux uniquement)
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
