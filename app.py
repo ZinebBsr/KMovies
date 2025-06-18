@@ -2,12 +2,53 @@ from flask import Flask, render_template, request
 import sqlite3
 import pickle
 import os
+import subprocess
 
 app = Flask(__name__)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PICKLE_PATH = os.path.join(BASE_DIR, "clusters.pkl")
 DB_PATH = os.path.join(BASE_DIR, "moviesdatabase.db")
+
+# Fetch and recombine database parts at startup
+if not os.path.exists(DB_PATH):
+    # List of Google Drive direct download links for each part
+    download_links = [
+        "https://drive.google.com/uc?export=download&id=1urd03BYonjnZKR-xmSdUEIoR2NqLIBaU",  # partaa
+        "https://drive.google.com/uc?export=download&id=1NdLQcMouKL9fmiI7YIwnYvB_opLJVGTV",  # partab
+        "https://drive.google.com/uc?export=download&id=1zTzeBygoN235ze8UU-oz8SmQ2tLTx9NZ",  # partac
+        "https://drive.google.com/uc?export=download&id=13GO_K0V8pdPz5dJ5pb_-l2JfwmdWLJl-",  # partad
+        "https://drive.google.com/uc?export=download&id=1T13tqRz90_YVxeqcvBljCVnK7qIvJUt4",  # partae
+        "https://drive.google.com/uc?export=download&id=1r_fYCfWl2DpyeWu-0Av3AWYDzu0T7cPH",  # partaf
+        "https://drive.google.com/uc?export=download&id=1spXBzV5gqX8tq176NAFP2yr3B2yixiQ6",  # partag
+        "https://drive.google.com/uc?export=download&id=1JBaC24kpjrAIwCOx_u0JkeLfPjgmrnVP",  # partah
+        "https://drive.google.com/uc?export=download&id=1ClSGEICy7pWiOROnnWt_uaP3NQ7B0LBk",  # partai
+        "https://drive.google.com/uc?export=download&id=1lDA9Fx6fvCB46EeYwojRbi8XiEswViR_",  # partaj
+        "https://drive.google.com/uc?export=download&id=1SE3564Rr66zide0MFry6nv_jppRTHODK",  # partak
+        "https://drive.google.com/uc?export=download&id=1LdbtFOtIH7aB5yZrBDSxHHvc1n9aPu70",  # partal
+        "https://drive.google.com/uc?export=download&id=1x_stJT-vXo76mHQEn1WeWd-LN1RZVwyt",  # partam
+        "https://drive.google.com/uc?export=download&id=1O_Xlz541r0C2IyLlMnUhaZSQgO_ephno"   # partan
+    ]
+
+    # Download each part
+    for i, link in enumerate(download_links):
+        part_name = f"parta{i:02d}"  # e.g., partaa, partab, ..., partan
+        try:
+            subprocess.run(["wget", "-O", part_name, link], check=True)
+        except subprocess.CalledProcessError as e:
+            app.logger.error(f"Failed to download {part_name}: {e}")
+            raise
+
+    # Recombine parts into moviesdatabase.db
+    try:
+        with open(DB_PATH, "wb") as outfile:
+            for part_name in [f"parta{i:02d}" for i in range(len(download_links))]:
+                with open(part_name, "rb") as infile:
+                    outfile.write(infile.read())
+                os.remove(part_name)  # Clean up temporary files
+    except Exception as e:
+        app.logger.error(f"Error recombining database: {e}")
+        raise
 
 # Chargement du fichier clusters.pkl
 try:
